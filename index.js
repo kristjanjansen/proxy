@@ -25,7 +25,7 @@ app.get("/*", async (c) => {
   return c.json(json);
 });
 
-const port = 8080;
+const port = 80;
 
 serve({
   fetch: app.fetch,
