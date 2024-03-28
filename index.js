@@ -14,6 +14,9 @@ app.use("/*", cors());
 
 app.get("/*", async (c) => {
   const url = new URL(c.req.url);
+  if (url.pathname === "/favicon.ico") {
+    return c.text("");
+  }
   const fetchUrl = url.pathname.replace(/^\//, "") + url.search;
   const page = await context.newPage();
   await page.goto(fetchUrl);
@@ -25,9 +28,11 @@ app.get("/*", async (c) => {
   return c.json(json);
 });
 
-const port = 80;
+const port = process.argv[2] || 4000;
 
 serve({
   fetch: app.fetch,
   port,
 });
+
+console.log("Proxy started on http://localhost:" + port);
