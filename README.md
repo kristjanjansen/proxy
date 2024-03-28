@@ -8,6 +8,7 @@ Run
 
 ```sh
 npm install
+npx playwright install chrome
 node index.js
 ```
 
