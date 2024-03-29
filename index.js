@@ -1,7 +1,9 @@
 import { serve } from "@hono/node-server";
 import { Hono } from "hono";
 import { cors } from "hono/cors";
-import { chromium, devices } from "playwright";
+import puppeteer from "puppeteer-extra";
+import StealthPlugin from "puppeteer-extra-plugin-stealth";
+puppeteer.use(StealthPlugin());
 
 const app = new Hono({
   getPath: (req) => req.url.replace(/^https?:\/(.+?)$/, "$1"),
@@ -22,9 +24,11 @@ app.get("/*", async (c) => {
     return c.text("");
   }
   const fetchUrl = url.pathname.replace(/^\//, "") + url.search;
-  const page = await context.newPage();
-  await page.goto(fetchUrl);
 
+  const page = await browser.newPage();
+
+  await page.goto(fetchUrl);
+  const a = await page.content();
   const content = await page.evaluate(() => {
     const pres = document.querySelectorAll("pre");
     if (pres?.length === 1) {
