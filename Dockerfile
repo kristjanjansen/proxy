@@ -11,4 +11,4 @@ WORKDIR /app
 COPY . .
 RUN npm ci
 EXPOSE 8080
-CMD [ "node", "index.js", "8080" ]
+CMD [ "node", "index.js", "8080", "/usr/bin/google-chrome" ]
