@@ -24,7 +24,7 @@ app.get("/*", async (c) => {
   const fetchUrl = url.pathname.replace(/^\//, "") + url.search;
   const page = await context.newPage();
   await page.goto(fetchUrl);
-  const a = await page.content();
+
   const content = await page.evaluate(() => {
     const pres = document.querySelectorAll("pre");
     if (pres?.length === 1) {
