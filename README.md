@@ -1,15 +1,14 @@
 ## About
 
-A local http proxy to bypass CORS / Cloudflare using Hono and Playwright.
+A local http proxy to bypass CORS / Cloudflare using Hono and Puppeteer.
 
 ## Usage
 
-Run
+Make sure you have Chrome installed. Then run:
 
 ```sh
 npm install
-npx playwright install chrome
-node index.js
+npm run start
 ```
 
 By default the proxy is started at http://localhost:4000
@@ -20,12 +19,10 @@ You can proxy an URL https://example.com as:
 http://localhost:4000/https://example.com
 ```
 
-**Note**: The proxy expects a JSON response.
-
 ## Options
 
-Optionally you can specify a port number as an argument:
+For Docker usage, use the following setup:
 
 ```sh
-node index.js 4001
+npm run start 8080 /usr/bin/google-chrome
 ```
