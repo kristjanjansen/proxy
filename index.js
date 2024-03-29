@@ -9,7 +9,8 @@ const app = new Hono({
   getPath: (req) => req.url.replace(/^https?:\/(.+?)$/, "$1"),
 });
 const browser = await puppeteer.launch({
-  headless: true,
+  executablePath: "/usr/bin/google-chrome",
+  args: ["--no-sandbox", "--disable-setuid-sandbox"],
 });
 
 // Corrected to directly use a new page for each request.

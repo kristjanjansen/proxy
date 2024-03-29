@@ -11,7 +11,7 @@ WORKDIR /app
 COPY . .
 RUN npm ci
 EXPOSE 8080
-ENV CHROME_BIN=/usr/bin/google-chrome
+#ENV CHROME_BIN=/usr/bin/google-chrome
 ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
-ENV PUPPETEER_ARGS='--no-sandbox'
+#ENV PUPPETEER_ARGS='--no-sandbox'
 CMD [ "node", "index.js", "8080" ]
