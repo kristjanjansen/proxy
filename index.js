@@ -10,7 +10,6 @@ const app = new Hono({
 });
 const browser = await puppeteer.launch({
   headless: true,
-  executablePath: "/usr/bin/chromium-browser",
 });
 
 // Corrected to directly use a new page for each request.
