@@ -8,7 +8,10 @@ puppeteer.use(StealthPlugin());
 const app = new Hono({
   getPath: (req) => req.url.replace(/^https?:\/(.+?)$/, "$1"),
 });
-const browser = await puppeteer.launch({ headless: true });
+const browser = await puppeteer.launch({
+  headless: true,
+  executablePath: "/usr/bin/chromium-browser",
+});
 
 // Corrected to directly use a new page for each request.
 // If incognito mode is needed, uncomment the relevant lines.
