@@ -22,6 +22,11 @@ app.use("/*", cors());
 
 app.get("/*", async (c) => {
   const url = new URL(c.req.url);
+
+  const protocol = url.protocol;
+  const host = url.host;
+  const rewrite = `${protocol}//${host}`;
+
   if (url.pathname === "/favicon.ico") {
     return c.text("");
   }
@@ -43,7 +48,7 @@ app.get("/*", async (c) => {
     const res = await fetch(fetchUrl).then((res) => res.text());
     const rewrittenRes = res.replace(
       '"/6g-api"',
-      `"http://localhost:${port}/https://www.energia.ee/6g-api"`
+      `"${rewrite}/https://www.energia.ee/6g-api"`
     );
     const contentTypes = {
       css: "text/css",
