@@ -5,6 +5,8 @@ import puppeteer from "puppeteer-extra";
 import StealthPlugin from "puppeteer-extra-plugin-stealth";
 puppeteer.use(StealthPlugin());
 
+const port = process.argv[2] || 4000;
+
 const app = new Hono({
   getPath: (req) => req.url.replace(/^https?:\/(.+?)$/, "$1"),
 });
@@ -24,6 +26,34 @@ app.get("/*", async (c) => {
     return c.text("");
   }
   const fetchUrl = url.pathname.replace(/^\//, "") + url.search;
+
+  const contentType = (filename) => {
+    if (filename.endsWith("css")) {
+      return "css";
+    }
+    if (filename.endsWith("js")) {
+      return "js";
+    }
+    if (filename.endsWith("svg")) {
+      return "svg";
+    }
+  };
+
+  if (["css", "js", "svg"].includes(contentType(fetchUrl))) {
+    const res = await fetch(fetchUrl).then((res) => res.text());
+    const rewrittenRes = res.replace(
+      '"/6g-api"',
+      `"http://localhost:${port}/https://www.energia.ee/6g-api"`
+    );
+    const contentTypes = {
+      css: "text/css",
+      js: "application/javascript",
+      svg: "image/svg+xml",
+    };
+    return c.body(rewrittenRes, 200, {
+      "Content-Type": contentTypes[contentType(fetchUrl)],
+    });
+  }
 
   const page = await browser.newPage();
 
@@ -46,8 +76,6 @@ app.get("/*", async (c) => {
   }
   return c.text("");
 });
-
-const port = process.argv[2] || 4000;
 
 serve({
   fetch: app.fetch,
