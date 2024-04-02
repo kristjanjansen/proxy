@@ -23,9 +23,10 @@ app.use("/*", cors());
 app.get("/*", async (c) => {
   const url = new URL(c.req.url);
 
-  const protocol = url.protocol;
-  const host = url.host;
-  const rewrite = `${protocol}//${host}`;
+  const rewrite = `${url.hostname == "localhost" ? "http" : "https"}://${
+    url.host
+  }`;
+  console.log(rewrite);
 
   if (url.pathname === "/favicon.ico") {
     return c.text("");
