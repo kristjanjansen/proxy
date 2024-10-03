@@ -6,6 +6,7 @@ import StealthPlugin from "puppeteer-extra-plugin-stealth";
 puppeteer.use(StealthPlugin());
 
 const port = process.argv[2] || 4000;
+const domain = "www.enefit.lv";
 
 const app = new Hono({
   getPath: (req) => req.url.replace(/^https?:\/(.+?)$/, "$1"),
@@ -26,7 +27,6 @@ app.get("/*", async (c) => {
   const rewrite = `${url.hostname == "localhost" ? "http" : "https"}://${
     url.host
   }`;
-  console.log(rewrite);
 
   if (url.pathname === "/favicon.ico") {
     return c.text("");
@@ -47,10 +47,13 @@ app.get("/*", async (c) => {
 
   if (["css", "js", "svg"].includes(contentType(fetchUrl))) {
     const res = await fetch(fetchUrl).then((res) => res.text());
-    const rewrittenRes = res.replace(
-      '"/6g-api"',
-      `"${rewrite}/https://www.energia.ee/6g-api"`
-    );
+    const rewrittenRes = res
+      .replace("/6g-api", `${rewrite}/https://www.energia.ee/6g-api`)
+      .replace("/.rest/v1", `${rewrite}/https://${domain}/.rest/v1`)
+      .replace("/api/v1", `${rewrite}/https:/${domain}/.api/v1`)
+      .replace("/api/v2", `${rewrite}/https:/${domain}/.api/v2`);
+
+    console.log(rewrittenRes);
     const contentTypes = {
       css: "text/css",
       js: "application/javascript",
